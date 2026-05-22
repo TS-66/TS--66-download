@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TS-66 Terminal - Download</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap');
+
+:root {
+  --g: #00ff41;
+  --dg: #00a828;
+  --bg: #030803;
+  --red: #ff2222;
+  --yel: #ffe000;
+  --blu: #00cfff;
+  --scan: rgba(0,255,65,0.025);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--g);
+  font-family: 'Share Tech Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, var(--scan) 2px, var(--scan) 4px);
+  pointer-events: none; z-index: 9000;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 52%, rgba(0,0,0,0.55) 100%);
+  pointer-events: none; z-index: 9001;
+  animation: flicker 9s infinite;
+}
+@keyframes flicker { 0%,93%,100%{opacity:1} 94%{opacity:.82} 96%{opacity:.95} 98%{opacity:.88} }
+
+@keyframes pulse-glow {
+  0%,100% { box-shadow: 0 0 5px var(--g), 0 0 10px var(--g); }
+  50% { box-shadow: 0 0 8px var(--g), 0 0 20px var(--g), 0 0 30px rgba(0,255,65,.3); }
+}
+@keyframes bk { 0%,100%{opacity:1} 50%{opacity:.5} }
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(30px); }
+  to { opacity:1; transform:translateY(0); }
+}
+@keyframes glitch {
+  0%,87%,100% { transform:none; text-shadow:0 0 18px var(--g),0 0 40px rgba(0,255,65,.3); }
+  88% { transform:skewX(-1.5deg) translateX(-1px); text-shadow:2px 0 var(--red),-2px 0 #0ff;opacity:0.95; }
+  89% { transform:skewX(0.8deg) translateX(1px); text-shadow:-2px 0 #0ff,2px 0 var(--red); }
+  90% { transform:skewX(-0.5deg); opacity:0.9; }
+  91% { transform:none; opacity:1; }
+}
+
+.chrome-bar {
+  position: fixed; left:0; right:0; height:3px; z-index:9500;
+  background: repeating-linear-gradient(90deg,
+    var(--red) 0, var(--red) 16px, transparent 16px, transparent 24px,
+    var(--yel) 24px, var(--yel) 40px, transparent 40px, transparent 48px);
+  opacity: .7;
+  animation: pulse-glow 4s infinite;
+}
+.chrome-top { top:0; }
+.chrome-bot { bottom:0; }
+
+.container {
+  position: relative;
+  z-index: 2;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 60px 20px 80px;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 60px 0 40px;
+  animation: slideUp .6s ease;
+}
+.hero-badge {
+  display: inline-block;
+  background: linear-gradient(160deg, #5a0000, #cc0000 40%, #aa0000 60%, #700000);
+  color: #fff;
+  font-family: 'VT323', monospace;
+  padding: 6px 24px;
+  font-size: 0.7rem;
+  letter-spacing: 6px;
+  border: 1px solid rgba(255,80,80,.5);
+  margin-bottom: 24px;
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
+}
+.hero-title {
+  font-family: 'VT323', monospace;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  color: var(--g);
+  letter-spacing: 8px;
+  text-shadow: 0 0 18px var(--g), 0 0 40px rgba(0,255,65,.3);
+  animation: glitch 8s infinite;
+  line-height: 1.1;
+}
+.hero-sub {
+  font-size: 0.9rem;
+  color: var(--dg);
+  letter-spacing: 4px;
+  margin-top: 12px;
+}
+.hero-desc {
+  max-width: 600px;
+  margin: 20px auto 0;
+  font-size: 0.8rem;
+  color: rgba(0,255,65,.6);
+  line-height: 1.8;
+  letter-spacing: 1px;
+}
+
+/* FEATURES */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin: 50px 0;
+  animation: slideUp .8s ease .2s backwards;
+}
+.feature-card {
+  border: 1px solid rgba(0,255,65,.15);
+  background: rgba(5,13,5,.8);
+  padding: 24px;
+  position: relative;
+  transition: all .3s;
+}
+.feature-card:hover {
+  border-color: rgba(0,255,65,.4);
+  box-shadow: 0 0 20px rgba(0,255,65,.1);
+  transform: translateY(-2px);
+}
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 20px;
+  width: 40px; height: 2px;
+  background: var(--red);
+  box-shadow: 0 0 8px var(--red);
+}
+.feature-icon {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  display: block;
+}
+.feature-title {
+  font-family: 'VT323', monospace;
+  font-size: 1.2rem;
+  color: var(--yel);
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+.feature-desc {
+  font-size: 0.7rem;
+  color: rgba(0,255,65,.5);
+  line-height: 1.7;
+  letter-spacing: .5px;
+}
+
+/* DOWNLOAD SECTION */
+.download-section {
+  text-align: center;
+  margin: 50px 0;
+  animation: slideUp 1s ease .4s backwards;
+}
+.section-title {
+  font-family: 'VT323', monospace;
+  font-size: 1.8rem;
+  color: var(--yel);
+  letter-spacing: 6px;
+  text-shadow: 0 0 10px var(--yel);
+  margin-bottom: 8px;
+}
+.section-sub {
+  font-size: 0.65rem;
+  color: var(--dg);
+  letter-spacing: 3px;
+  margin-bottom: 30px;
+}
+
+.download-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.dl-card {
+  border: 1px solid rgba(0,207,255,.2);
+  background: rgba(0,10,20,.7);
+  padding: 24px 16px;
+  text-align: center;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+}
+.dl-card:hover {
+  border-color: rgba(0,207,255,.5);
+  box-shadow: 0 0 25px rgba(0,207,255,.15);
+  transform: translateY(-3px);
+}
+.dl-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--blu);
+  box-shadow: 0 0 10px var(--blu);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.dl-card:hover::after { opacity: 1; }
+
+.dl-platform {
+  font-family: 'VT323', monospace;
+  font-size: 1.3rem;
+  color: var(--blu);
+  letter-spacing: 3px;
+  margin-bottom: 4px;
+}
+.dl-icon {
+  font-size: 2rem;
+  margin-bottom: 6px;
+  display: block;
+}
+.dl-size {
+  font-size: 0.55rem;
+  color: rgba(0,207,255,.4);
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.dl-btn {
+  display: inline-block;
+  background: rgba(0,207,255,.08);
+  border: 1px solid rgba(0,207,255,.35);
+  color: var(--blu);
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  letter-spacing: 3px;
+  padding: 10px 24px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .2s;
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);
+}
+.dl-btn:hover {
+  background: var(--blu);
+  color: #000;
+  box-shadow: 0 0 20px rgba(0,207,255,.4);
+}
+.dl-note {
+  font-size: 0.5rem;
+  color: rgba(0,207,255,.3);
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+/* SETUP SECTION */
+.setup-section {
+  margin: 60px 0;
+  animation: slideUp 1s ease .5s backwards;
+}
+.setup-steps {
+  border: 1px solid rgba(0,255,65,.12);
+  background: rgba(5,13,5,.8);
+  padding: 28px;
+}
+.step {
+  margin-bottom: 20px;
+  padding-left: 20px;
+  border-left: 2px solid var(--dg);
+}
+.step:last-child { margin-bottom: 0; }
+.step-num {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: var(--red);
+  letter-spacing: 3px;
+}
+.step-title {
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  color: var(--yel);
+  letter-spacing: 2px;
+  margin: 4px 0;
+}
+.step-desc {
+  font-size: 0.7rem;
+  color: rgba(0,255,65,.5);
+  line-height: 1.6;
+  letter-spacing: .5px;
+}
+.code-block {
+  background: rgba(0,0,0,.6);
+  border: 1px solid rgba(0,255,65,.1);
+  padding: 10px 14px;
+  margin: 8px 0;
+  font-size: 0.72rem;
+  color: var(--g);
+  overflow-x: auto;
+  letter-spacing: 1px;
+}
+.code-block .prompt { color: var(--red); }
+
+/* REQUIREMENTS */
+.req-section {
+  margin: 50px 0;
+  animation: slideUp 1s ease .6s backwards;
+}
+.req-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.req-item {
+  border: 1px solid rgba(255,224,0,.12);
+  background: rgba(10,10,0,.5);
+  padding: 16px;
+  text-align: center;
+}
+.req-label {
+  font-family: 'VT323', monospace;
+  color: var(--yel);
+  font-size: 0.9rem;
+  letter-spacing: 3px;
+}
+.req-value {
+  font-size: 0.7rem;
+  color: rgba(0,255,65,.5);
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  margin-top: 60px;
+  padding: 30px 0;
+  border-top: 1px solid rgba(0,255,65,.08);
+}
+.footer-logo {
+  font-family: 'VT323', monospace;
+  font-size: 1.3rem;
+  color: var(--red);
+  letter-spacing: 5px;
+  animation: bk 2s infinite;
+}
+.footer-text {
+  font-size: 0.55rem;
+  color: var(--dg);
+  letter-spacing: 3px;
+  margin-top: 8px;
+}
+
+/* SCROLL INDICATOR */
+.scroll-hint {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9500;
+  font-family: 'VT323', monospace;
+  font-size: 0.8rem;
+  color: var(--dg);
+  letter-spacing: 3px;
+  animation: bk 1.5s infinite;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .5s;
+}
+.scroll-hint.visible { opacity: 1; }
+
+/* RESPONSIVE */
+@media (max-width: 700px) {
+  .container { padding: 40px 14px 60px; }
+  .hero { padding: 40px 0 30px; }
+  .hero-title { letter-spacing: 4px; }
+  .features { grid-template-columns: 1fr; }
+  .download-cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="chrome-bar chrome-top"></div>
+<div class="chrome-bar chrome-bot"></div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">SCP FOUNDATION // CLASSIFIED</div>
+    <h1 class="hero-title">TS-66 TERMINAL</h1>
+    <p class="hero-sub">SECURE DESKTOP APPLICATION</p>
+    <p class="hero-desc">
+      A classified SCP Foundation terminal interface with integrated AI assistant,
+      real-time monitoring systems, web search capabilities, and Discord integration.
+      Download, install, and open — just like any app on your computer. No coding required.
+    </p>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="feature-card">
+      <span class="feature-icon">&#x1F916;</span>
+      <div class="feature-title">AI ASSISTANT</div>
+      <div class="feature-desc">Multi-provider AI integration with Groq, Gemini, and Cloudflare Workers AI. Automatic fallback and key rotation for maximum uptime.</div>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">&#x1F4BB;</span>
+      <div class="feature-title">ONE-CLICK INSTALL</div>
+      <div class="feature-desc">Download and install like any normal app. Shows up in your Start Menu (Windows), Launchpad (Mac), or App Menu (Linux). Just click to open.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">&#x1F6E1;</span>
+      <div class="feature-title">TERMINAL UI</div>
+      <div class="feature-desc">Authentic CRT-style interface with scan lines, glitch effects, and SCP Foundation aesthetic. Fully responsive design.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">&#x26A1;</span>
+      <div class="feature-title">REAL-TIME</div>
+      <div class="feature-desc">WebSocket-powered real-time communication. Live typing indicators, streaming AI responses, and instant message delivery.</div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD -->
+  <section class="download-section" id="download">
+    <div class="section-title">// DOWNLOAD</div>
+    <div class="section-sub">DOWNLOAD // INSTALL // CLICK TO OPEN</div>
+
+    <div class="download-cards">
+      <div class="dl-card">
+        <span class="dl-icon">&#x1F5A5;</span>
+        <div class="dl-platform">WINDOWS</div>
+        <div class="dl-size">Installer (.exe) // ~75 MB</div>
+        <a href="/downloads/TS-66%20Terminal%20Setup%201.0.0.exe" class="dl-btn" download>DOWNLOAD</a>
+        <div class="dl-note">Install &rarr; find in Start Menu &rarr; click to open</div>
+      </div>
+      <div class="dl-card">
+        <span class="dl-icon">&#x1F34E;</span>
+        <div class="dl-platform">macOS</div>
+        <div class="dl-size">App (.zip) // ~96 MB</div>
+        <a href="/downloads/TS-66%20Terminal-1.0.0-mac.zip" class="dl-btn" download>DOWNLOAD</a>
+        <div class="dl-note">Extract &rarr; drag to Applications &rarr; click to open</div>
+      </div>
+      <div class="dl-card">
+        <span class="dl-icon">&#x1F427;</span>
+        <div class="dl-platform">LINUX x64</div>
+        <div class="dl-size">.deb package // ~72 MB</div>
+        <a href="/downloads/ts66-terminal_1.0.0_amd64.deb" class="dl-btn" download>DOWNLOAD</a>
+        <div class="dl-note">Install &rarr; find in App Menu &rarr; click to open</div>
+      </div>
+      <div class="dl-card">
+        <span class="dl-icon">&#x1F427;</span>
+        <div class="dl-platform">LINUX ARM64</div>
+        <div class="dl-size">.deb package // ~68 MB</div>
+        <a href="/downloads/ts66-terminal_1.0.0_arm64.deb" class="dl-btn" download>DOWNLOAD</a>
+        <div class="dl-note">Raspberry Pi / ARM &mdash; click to open</div>
+      </div>
+      <div class="dl-card">
+        <span class="dl-icon">&#x1F427;</span>
+        <div class="dl-platform">LINUX UNIVERSAL</div>
+        <div class="dl-size">AppImage // ~105 MB</div>
+        <a href="/downloads/TS-66%20Terminal-1.0.0.AppImage" class="dl-btn" download>DOWNLOAD</a>
+        <div class="dl-note">Make executable &rarr; double-click to open</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SETUP INSTRUCTIONS -->
+  <section class="setup-section">
+    <div class="section-title">// HOW TO INSTALL</div>
+    <div class="section-sub">NO CODING REQUIRED // JUST DOWNLOAD AND OPEN</div>
+
+    <div class="setup-steps">
+      <div class="step">
+        <div class="step-num">WINDOWS</div>
+        <div class="step-title">DOWNLOAD &rarr; INSTALL &rarr; OPEN</div>
+        <div class="step-desc">
+          1. Download the .exe file above<br>
+          2. Double-click it to run the installer<br>
+          3. Follow the setup wizard (choose where to install)<br>
+          4. Find "TS-66 Terminal" in your <strong>Start Menu</strong> or on your <strong>Desktop</strong><br>
+          5. Click to open &mdash; that's it!
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">macOS</div>
+        <div class="step-title">DOWNLOAD &rarr; EXTRACT &rarr; OPEN</div>
+        <div class="step-desc">
+          1. Download the .zip file above<br>
+          2. Double-click to extract it<br>
+          3. Drag "TS-66 Terminal" into your <strong>Applications</strong> folder<br>
+          4. First time only: right-click the app &rarr; click "Open" (because it's unsigned)<br>
+          5. After that, just click to open from <strong>Launchpad</strong> or <strong>Spotlight</strong>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">LINUX</div>
+        <div class="step-title">DOWNLOAD &rarr; INSTALL &rarr; OPEN</div>
+        <div class="step-desc">
+          <strong>Debian / Ubuntu (.deb):</strong><br>
+          1. Download the .deb file (x64 or ARM64)<br>
+          2. Double-click it to open in Software Center, then click "Install"<br>
+          &nbsp;&nbsp;&nbsp;Or run: <code>sudo dpkg -i ts66-terminal_1.0.0_amd64.deb</code><br>
+          3. Find "TS-66 Terminal" in your <strong>App Menu</strong> and click to open<br><br>
+          <strong>Any Distro (AppImage):</strong><br>
+          1. Download the AppImage<br>
+          2. Right-click &rarr; Properties &rarr; check "Allow executing as program"<br>
+          3. Double-click to open
+        </div>
+      </div>
+
+
+    </div>
+  </section>
+
+  <!-- REQUIREMENTS -->
+  <section class="req-section">
+    <div class="section-title">// SYSTEM REQUIREMENTS</div>
+    <div class="section-sub">MINIMUM SPECIFICATIONS</div>
+    <div class="req-grid">
+      <div class="req-item">
+        <div class="req-label">RAM</div>
+        <div class="req-value">512 MB minimum</div>
+      </div>
+      <div class="req-item">
+        <div class="req-label">STORAGE</div>
+        <div class="req-value">~200 MB</div>
+      </div>
+      <div class="req-item">
+        <div class="req-label">OS</div>
+        <div class="req-value">Windows 10+ / macOS 10.15+ / Linux</div>
+      </div>
+      <div class="req-item">
+        <div class="req-label">ARCH</div>
+        <div class="req-value">x64 &amp; ARM64</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logo">TS-66</div>
+    <div class="footer-text">SCP FOUNDATION // UNAUTHORIZED ACCESS WILL BE PROSECUTED</div>
+    <div class="footer-text" style="margin-top:4px">v1.0.0 // FULL RELEASE</div>
+  </footer>
+
+</div>
+
+<script>
+// Scroll hint
+const hint = document.createElement('div');
+hint.className = 'scroll-hint';
+hint.textContent = '[ SCROLL DOWN ]';
+document.body.appendChild(hint);
+setTimeout(() => hint.classList.add('visible'), 1500);
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 100) hint.classList.remove('visible');
+  else hint.classList.add('visible');
+});
+
+// Smooth reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .dl-card, .step, .req-item').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(20px)';
+  el.style.transition = 'opacity .6s ease, transform .6s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
