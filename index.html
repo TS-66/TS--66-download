@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCP Foundation - Secure Terminal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Initial Setup Modal - SCP Entry Terminal -->
+    <div id="setup-modal" class="modal">
+        <div class="modal-content">
+            <h2>Secure Terminal Access</h2>
+            <p>Enter your credentials to access TS - 66 Chating. All communications are monitored and classified.</p>
+            
+            <label for="setup-username">Operative Designation</label>
+            <input type="text" id="setup-username" placeholder="Enter operative name..." maxlength="32">
+            
+            <label for="setup-avatar">Profile Image URL</label>
+            <input type="url" id="setup-avatar" placeholder="https://example.com/avatar.jpg">
+            
+            <button id="join-btn">ACCESS TERMINAL</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal settings-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="settings-header">
+                <h2>Operative Settings</h2>
+                <button class="close-btn" id="close-settings">&times;</button>
+            </div>
+            
+            <div class="profile-preview">
+                <div id="settings-avatar-preview" class="avatar-placeholder">?</div>
+                <div class="profile-preview-info">
+                    <div class="label">Current Designation</div>
+                    <div id="settings-username-display" class="value">Unknown</div>
+                </div>
+            </div>
+            
+            <label for="settings-username">New Operative Designation</label>
+            <input type="text" id="settings-username" placeholder="Enter new name..." maxlength="32">
+            
+            <label for="settings-avatar">New Profile Image URL</label>
+            <input type="url" id="settings-avatar" placeholder="https://example.com/new-avatar.jpg">
+            
+            <button id="save-settings">UPDATE CREDENTIALS</button>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="app-container" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="server-icon">
+                    <span>SCP</span>
+                </div>
+                <h3>FOUNDATION</h3>
+                <div class="subtitle">Secure Communications</div>
+            </div>
+
+            <div class="channels-section">
+                <div class="section-header">
+                    <span>Active Channels</span>
+                </div>
+                <ul class="channel-list" id="channel-list">
+                    <li class="channel-item active" data-channel="TS - 66 Chating">
+                        <span class="channel-icon">&gt;</span>
+                        <span class="channel-name">TS - 66 CHATING</span>
+                        <span class="classified-badge">LVL 4</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="user-section">
+                <div class="user-avatar" id="user-avatar">
+                    <div class="avatar-placeholder" id="user-avatar-letter">?</div>
+                </div>
+                <div class="user-info">
+                    <span id="current-username" class="username">Unknown</span>
+                    <span class="clearance">Level 4 Clearance</span>
+                </div>
+                <button class="settings-icon" id="open-settings" title="Settings">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-container">
+            <!-- Channel Header -->
+            <header class="channel-header">
+                <div class="channel-title">
+                    <span class="header-icon">&gt;</span>
+                    <h2 id="current-channel">TS - 66 CHATING</h2>
+                    <span class="classification">CLASSIFIED</span>
+                </div>
+                <div class="connection-status" id="connection-status">
+                    <span class="status-dot connecting"></span>
+                    <span class="status-text">SECURE CONNECTION...</span>
+                </div>
+            </header>
+
+            <!-- Messages Area -->
+            <div class="messages-container" id="messages-container">
+                <div class="welcome-message">
+                    <div class="doc-header">
+                        <span class="doc-id">DOC# TS-66-001</span>
+                        <span class="doc-date" id="current-date">[REDACTED]</span>
+                    </div>
+                    <h3>TERMINAL TS - 66 CHATING</h3>
+                    <p>Welcome to the secure communications terminal. This channel is restricted to Level 4 personnel and above. All messages are logged and monitored by Foundation security protocols. Unauthorized disclosure of information is punishable under Protocol 7.</p>
+                </div>
+                <div id="messages-list"></div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                <span id="typing-text"></span>
+            </div>
+
+            <!-- Message Input -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <button class="attach-btn" title="Add attachment">+</button>
+                    <input type="text" id="message-input" placeholder="Enter secure transmission..." maxlength="2000" autocomplete="off">
+                    <button id="send-btn" class="send-btn">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Socket.IO Client -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
